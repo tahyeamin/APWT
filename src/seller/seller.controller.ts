@@ -2,6 +2,10 @@ import { Controller, Post, Get, Put, Patch, Delete, Param, Body, Query } from '@
 import { SellerService } from './seller.service';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
+import { ValidationSellerDto } from './dto/validation-seller.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+
 
 
 @Controller('seller')
@@ -55,4 +59,24 @@ export class SellerController {
   async searchSellers(@Query('storeName') storeName: string) {
     return this.sellerService.searchByStoreName(storeName);
   }
+
+
+
+
+// new route for validation
+
+
+@Post('validate')
+@UseInterceptors(FileInterceptor('nidImage'))
+async validateSellerData(
+  @Body() validationSellerDto: ValidationSellerDto,
+  @UploadedFile() nidImage: Express.Multer.File,
+) {
+  
+  return this.sellerService.validateSellerData(validationSellerDto, nidImage);
+}
+
+
+
+
 }

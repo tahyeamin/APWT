@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException,BadRequestException } from '@nestjs/common';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
-import { Product } from './product.interface';
+import { ValidationSellerDto } from './dto/validation-seller.dto';
 
 import { Seller } from './seller.interface';
 
@@ -86,4 +86,44 @@ export class SellerService {
     );
     return { storeName, sellers: filteredSellers };
   }
+
+
+
+  validateSellerData(dto: ValidationSellerDto, file: Express.Multer.File) {
+   
+    if (!file) {
+      throw new BadRequestException('NID image is required');
+    }
+
+  
+    if (file.size > 2 * 1024 * 1024) {
+      throw new BadRequestException('NID image must be less than 2 MB');
+    }
+
+    
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new BadRequestException('Only JPG, JPEG or PNG files are allowed');
+    }
+
+   
+    return {
+      message: 'Validation successful',
+      data: {
+        name: dto.name,
+        email: dto.email,
+        nidNumber: dto.nidNumber,
+        fileName: file.originalname,
+        fileSize: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+        mimeType: file.mimetype,
+      },
+    };
+  }
 }
+
+
+
+
+
+
+
