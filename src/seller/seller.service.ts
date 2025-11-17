@@ -89,6 +89,8 @@ export class SellerService {
 
 
 
+  // business logic for validation
+
   validateSellerData(dto: ValidationSellerDto, file: Express.Multer.File) {
    
     if (!file) {
