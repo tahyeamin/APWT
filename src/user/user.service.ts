@@ -30,7 +30,18 @@ export class UserService {
     async getUsersWithNullFullName(): Promise<User[]> {
         return await this.userRepository.find({
             where: { fullName: null as any },
-            
+
         });
+    }
+
+
+    async deleteUser(id: string): Promise<{ message: string }> {
+        const result = await this.userRepository.delete(id);
+
+        if (result.affected === 0) {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
+
+        return { message: `User with ID ${id} has been deleted successfully` };
     }
 }

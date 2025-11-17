@@ -1,13 +1,5 @@
 
-import {
-    Controller,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Get,
-    ParseUUIDPipe,
-} from '@nestjs/common';
+import {Controller,Post, Body, Patch, Param, Get,Delete, ParseUUIDPipe,} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PhoneValidationPipe } from './pipes/phone-validation.pipe';
@@ -26,7 +18,7 @@ async create(@Body() dto: CreateUserDto) {
   return this.userService.create(dto);
 }
 
-    @Patch(':id/phone')
+    @Patch(':id')
     updatePhone(
         @Param('id', ParseUUIDPipe) id: string,
         @Body('phone', PhoneValidationPipe) phone: string,
@@ -38,4 +30,9 @@ async create(@Body() dto: CreateUserDto) {
     getUsersWithNullFullName() {
         return this.userService.getUsersWithNullFullName();
     }
+
+@Delete(':id')
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.userService.deleteUser(id);
+  }
 }
