@@ -78,5 +78,11 @@ async validateSellerData(
 
 
 
+//another route for db connection
+
 
 }
+
+
+
+
